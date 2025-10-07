@@ -1,0 +1,151 @@
+--------------------------------------------------------------------------------
+Nom       : El Ouardini         
+Prénom    : Mohammed Amine
+Groupe TP : J
+--------------------------------------------------------------------------------
+
+Consigne : Dans ce fichier, les « ... » indiquent les endroits à compléter.
+Il s'agit de remplacer les « ... » par votre texte.  Merci de laisser une
+ligne blanche avant.  Le texte déjà écrit doit être conservé !
+
+
+=====[ Temps passé ]============================================================
+
+Ces informations de temps sont demandées à titre indicatif et ne sont en
+aucun cas prises en compte dans la notation du projet.
+Il faut remplacer les ... par des nombres.
+
+* Temps passé sur la V1 : ... heures ... minutes
+* Temps passé sur la V2 : ... heures ... minutes
+
+Pour la V2 on ne tiendra pas compte du temps passé sur la V1.
+
+
+=====[ Tests ]==================================================================
+
+-- Expliquer en quelques phrases comment vous avez testé votre programme (et
+-- quels tests ont été réalisés).
+Pour tester mon code, j'ai procédé de manière méthodique en testant chaque procédure et fonction de manière individuelle. À chaque étape de développement, j'ai exécuté des tests spécifiques pour vérifier le comportement attendu de chaque composant du programme. Cela m'a permis de détecter et de corriger les erreurs au fur et à mesure, avant de passer à l'étape suivante.
+
+J'ai commencé par tester les procédures qui gèrent les entrées utilisateur, comme la sélection du niveau de jeu et la décision de qui commence. Ensuite, j'ai vérifié les fonctions de génération de nombres aléatoires pour m'assurer qu'elles produisaient bien des valeurs comprises entre 1 et 3. Finalement, j'ai testé le déroulement complet du jeu, incluant les interactions entre l'humain et l'ordinateur, pour garantir que le jeu se déroule correctement jusqu'à ce qu'il y ait un gagnant ou qu'un joueur abandonne.
+
+Chaque test a été réalisé de manière itérative, afin de valider la logique et s'assurer que toutes les conditions et les cas particuliers sont correctement gérés.
+
+...
+
+
+=====[ Difficultés ]============================================================
+
+-- Indiquer les difficultés rencontrées et les solutions apportées.
+j'ai eu des diffucltés dans les boucles ainsi que dans l'affichage des allumettes enfin j'ai utilisé new ligne ainsi de donner en ordre les étapes et l'utilisation des boucles .
+...
+
+
+=====[ Remarques diverses ]=====================================================
+
+Remarque : Cette rubrique peut être vide.
+
+...
+
+
+=====[ Questions ]==============================================================
+
+-- Dans cette partie, on ne demande pas de modifier le programme écrit.  On
+-- doit expliquer de manière précise et concise ce qu'il faudrait faire pour
+-- prendre en compte les évolutions demandées.
+
+Q1 : Quand on demande le niveau de jeu de l'ordinateur, on veut pouvoir
+répondre « distrait », « naïf », « rapide », etc.  On remarque que le premier
+caractère correspond bien à la lettre à taper pour le niveau considéré.
+Est-ce possible dans votre programme ?  Dans la négative, comment le modifier
+pour que ce soit possible ?
+nous devons modifier Demander_niveau de cette maniére :
+*Utiliser une chaîne de caractères pour lire l'entrée de l'utilisateur au lieu d'un caractère unique.
+*Comparer cette chaîne avec les noms complets des niveaux pour déterminer le choix de l'utilisateur
+procedure Demander_Niveau is
+   Niveau_Char : String(1..10);  -- Permet de lire jusqu'à 10 caractères
+begin
+   Put_Line("Niveau de l'ordinateur (naïf, distrait, rapide ou expert) ?");
+   Get_Line(Niveau_Char);
+   if Niveau_Char = "naïf" then
+      Niveau := Naif;
+   elsif Niveau_Char = "distrait" then
+      Niveau := Distrait;
+   elsif Niveau_Char = "rapide" then
+      Niveau := Rapide;
+   elsif Niveau_Char = "expert" then
+      Niveau := Expert;
+   else
+      Niveau := Expert;  -- Niveau par défaut si l'entrée est incorrecte
+   end if;
+end Demander_Niveau;
+...
+
+
+Q2 : Quelles modifications faut-il apporter au programme pour avoir des
+allumettes représentées par 4 barres verticales (et non 3).
+il suffit de modifier la boucle pour itérer quatre fois au lieu de trois.
+for Ligne in 1 .. 4 loop  -- Quatre lignes pour représenter chaque niveau de l'allumette
+   for I in 1 .. Nombre_d_allumettes loop
+      Put("| ");  -- Affiche une allumette
+      if I mod 4 = 0 and I /= Nombre_d_allumettes then
+         Put("  ");  -- Double espace pour séparer les groupes de 4 allumettes
+      end if;
+   end loop;
+   New_Line;  -- Retour à la ligne après chaque niveau des allumettes
+end loop;
+
+...
+
+
+Q3 : Quelles modifications faut-il apporter au programme pour afficher les
+allumettes groupées par 4 (et non par 5).
+il suffit de changer la condition if I mod 5 = 0 par if I mod 4 = 0 dans la boucle
+if I mod 4 = 0 and I /= Nombre_d_allumettes then
+   Put("  ");  -- Double espace pour séparer les groupes de 4 allumettes
+end if;
+
+...
+
+
+Q4 : Quand l'utilisateur choisit le niveau de jeu, on veut qu'il puisse aussi
+donner un chiffre (0 pour distrait, 1 pour naïf, 2 pour rapide et 3 pour
+expert).  Quelles modifications faut-il apporter au programme ?
+il faut ajouter des conditions supplémentaires qui reconnaissent ces chiffres dans la procédure Demander_Niveau
+case Niveau_Char is
+   when '0' | 'd' | 'D' => Niveau := Distrait;
+   when '1' | 'n' | 'N' => Niveau := Naif;
+   when '2' | 'r' | 'R' => Niveau := Rapide;
+   when '3' | 'e' | 'E' => Niveau := Expert;
+   when others           => Niveau := Expert;  -- Niveau par défaut si l'entrée est incorrecte
+end case;
+
+...
+
+
+Q5 : On veut ajouter un nouveau mode de jeu pour la machine. Par exemple, un
+mode « lent » où l'ordinateur prend toujours une seule allumette.  Quelles
+modifications faut-il apporter au programme ?
+il faut 
+*Ajouter le mode « Lent » dans la définition de l'enum Niveau_Ordinateur.
+*Ajouter une condition pour ce mode dans la procédure Jouer_Ordinateur.
+type Niveau_Ordinateur is (Naif, Distrait, Rapide, Expert, Lent);  -- Ajout du mode Lent
+
+when Lent =>
+   Nombre_A_Prender := 1;  -- L'ordinateur prend toujours une allumette
+
+...
+
+
+Q6 : On veut que l'utilisateur puisse abandonner la partie en donnant un
+nombre d'allumettes strictement négatif.  Quelles modifications faut-il faire
+sur le programme ?
+il suffit de vérifier si le nombre d'allumettes est strictement négatif
+if Allumettes < 0 then
+   Put_Line("Vous avez abandonné la partie !");
+   exit;  -- Quitte la boucle de jeu pour terminer la partie
+
+...
+
+
+--------------------------------------------------------------------------------
